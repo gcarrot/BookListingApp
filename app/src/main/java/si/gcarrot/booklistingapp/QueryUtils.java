@@ -147,12 +147,8 @@ public class QueryUtils {
                 }
 
                 String title = volumeInfo.getString("title");
-
-                Log.i("Urban", title);
-
-                //String date =  "";
                 String date =  volumeInfo.getString("publishedDate") ;
-                Log.i("Urban", date);
+
                 Book book = new Book(author, title, date);
                 books.add(book);
             }

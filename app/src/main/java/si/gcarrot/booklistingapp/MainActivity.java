@@ -65,14 +65,12 @@ public class MainActivity extends AppCompatActivity
         // Update empty state with no first search error message
         mEmptyStateTextView.setText(R.string.no_start_search);
 
-        final EditText et_search = (EditText) findViewById(R.id.et_search);
-        final String search_text = et_search.getText().toString();
-
-
         Button btn_search = (Button) findViewById(R.id.btn_search);
 
         btn_search.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                EditText et_search = (EditText) findViewById(R.id.et_search);
+
                 if(!et_search.getText().equals("")){
 
                     loadingIndicator.setVisibility(View.VISIBLE);
@@ -90,8 +88,6 @@ public class MainActivity extends AppCompatActivity
                     if (networkInfo != null && networkInfo.isConnected()) {
                         // Get a reference to the LoaderManager, in order to interact with loaders.
                         LoaderManager loaderManager = getLoaderManager();
-
-
                         loaderManager.initLoader(LOADER_ID, null, MainActivity.this);
                     } else {
                         View loadingIndicator = findViewById(R.id.loading_indicator);
@@ -111,7 +107,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-
         mAdapter.clear();
 
         mEmptyStateTextView.setVisibility(View.GONE);
