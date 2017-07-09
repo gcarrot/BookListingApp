@@ -70,8 +70,13 @@ public class MainActivity extends AppCompatActivity
         btn_search.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 EditText et_search = (EditText) findViewById(R.id.et_search);
+                String search_text = et_search.getText().toString();
 
-                if(!et_search.getText().equals("")){
+                // Check if string is empty
+                if(!search_text.isEmpty()){
+
+                    mAdapter.clear();
+                    getLoaderManager().restartLoader(LOADER_ID, null, MainActivity.this);
 
                     loadingIndicator.setVisibility(View.VISIBLE);
                     mEmptyStateTextView.setVisibility(View.GONE);
@@ -97,6 +102,7 @@ public class MainActivity extends AppCompatActivity
                         mEmptyStateTextView.setText(R.string.no_internet_connection);
                     }
                 } else {
+                    mAdapter.clear();
                     // Update empty state with empty search string error message
                     mEmptyStateTextView.setText(R.string.empty_search);
                 }
@@ -140,11 +146,9 @@ public class MainActivity extends AppCompatActivity
         // Hide loading indicator because the data has been loaded
         View loadingIndicator = findViewById(R.id.loading_indicator);
         loadingIndicator.setVisibility(View.GONE);
-
+        mAdapter.clear();
 
         mEmptyStateTextView.setText(R.string.no_books);
-
-        mAdapter.clear();
         if (books != null && !books.isEmpty()) {
             mAdapter.addAll(books);
 

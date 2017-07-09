@@ -125,32 +125,43 @@ public class QueryUtils {
 
             Log.i(LOG_TAG, "JSON Rsponse: " + baseJsonResponse.toString());
 
-            JSONArray bookArray = baseJsonResponse.getJSONArray("items");
+            if(baseJsonResponse.has("items")){
+                JSONArray bookArray = baseJsonResponse.getJSONArray("items");
 
-            for (int i = 0; i < bookArray.length(); i++) {
+                for (int i = 0; i < bookArray.length(); i++) {
 
-                JSONObject currentBook = bookArray.getJSONObject(i);
+                    JSONObject currentBook = bookArray.getJSONObject(i);
 
-                JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");
+                    JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");
 
-                String author = "";
+                    String author = "";
 
-                /** Get all authors in array **/
-                JSONArray authors = volumeInfo.getJSONArray("authors");
-                for(int j = 0; j < authors.length(); j++) {
-                    author += authors.getString(j);
+                    if (volumeInfo.has("authors")) {
+                        /** Get all authors in array **/
+                        JSONArray authors = volumeInfo.getJSONArray("authors");
+                        for (int j = 0; j < authors.length(); j++) {
+                            author += authors.getString(j);
 
-                    // If multiple authors add char ', ' between
-                    if (j+1 < authors.length()) {
-                        author += ", ";
+                            // If multiple authors add char ', ' between
+                            if (j + 1 < authors.length()) {
+                                author += ", ";
+                            }
+                        }
+                    } else {
+                        author = "N/A";
                     }
+
+                    String title = volumeInfo.getString("title");
+                    String date = "";
+
+                    if(volumeInfo.has("publishedDate")){
+                        date =  volumeInfo.getString("publishedDate") ;
+                    }
+
+
+                    Book book = new Book(author, title, date);
+                    books.add(book);
                 }
-
-                String title = volumeInfo.getString("title");
-                String date =  volumeInfo.getString("publishedDate") ;
-
-                Book book = new Book(author, title, date);
-                books.add(book);
             }
 
         } catch (JSONException e) {
